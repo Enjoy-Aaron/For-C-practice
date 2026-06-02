@@ -1,51 +1,57 @@
 #include <iostream>
 #include <cstdio>
 #include <queue>
-#include <vector>
 #include <cstring>
 using namespace std;
-const int MAXN = 1010;
 
-typedef struct ArcNode{
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -2
+#define MAX(a,b) (a>b? a:b)
+#define MIN(a,b) (a<b? a:b)
+#define MAXSIZE 1010
+
+typedef char VertexType;
+typedef int Status;
+
+typedef struct ArcNode {
     int adjvex;
     int weight;
     ArcNode *nextarc;
-}ArcNode;
+} ArcNode;
 
-typedef struct VNode{
-    char data;
+typedef struct VNode {
+    VertexType data;
     ArcNode *firstarc;
-}VNode;
+} VNode;
 
 typedef struct AdjGraph {
-    VNode adj[MAXN];
+    VNode adj[MAXSIZE];
     int vexnum, arcnum;
     int kind;
-}AdjGraph;
+} AdjGraph;
 
-int getIndex(AdjGraph &G, char ch) {
-    for (int i=0; i<G.vexnum; ++i) {
-        if (G.adj[i].data == ch) return i;
+int GetIndex(AdjGraph &G, char vex) {
+    for (int i = 0; i < G.vexnum; ++i) {
+        if (G.adj[i].data == vex) return i;
     }
     return -1;
 }
 
-void CreateGraph(AdjGraph &G) {
-    scanf("%d",&G.kind);
-    scanf("%d%d", &G.vexnum, &G.arcnum);
-    for (int i=0; i<G.vexnum; ++i) {
+Status CreateGraph(AdjGraph &G) {
+    cin >> G.kind;
+    cin >> G.vexnum >> G.arcnum;
+    for (int i = 0; i < G.vexnum; ++i) {
         cin >> G.adj[i].data;
         G.adj[i].firstarc = NULL;
     }
-    char v1, v2;
-    int w = 0;
-    for (int i=0; i<G.arcnum; ++i) {
+    VertexType v1, v2;
+    int w;
+    for (int i = 0; i < G.arcnum; ++i) {
         cin >> v1 >> v2;
-        if (G.kind == 1 || G.kind == 3) {
-            cin >> w;
-        }
-        int v1_index = getIndex(G, v1);
-        int v2_index = getIndex(G, v2);
+        if (G.kind == 1 || G.kind == 3) cin >> w;
+        int v1_index = GetIndex(G, v1);
+        int v2_index = GetIndex(G, v2);
         ArcNode *p = new ArcNode;
         p->adjvex = v2_index;
         p->weight = w;
@@ -62,8 +68,8 @@ void CreateGraph(AdjGraph &G) {
     return OK;
 }
 
-bool visited[MAXN];
-void Graph_Traverse_BFS(AdjGraph &G, int start) {
+bool visited[MAXSIZE];
+Status TraverseGraph_BFS(AdjGraph &G, int start) {
     queue<int> q;
     memset(visited, false, sizeof(visited));
     visited[start] = true;
@@ -81,11 +87,12 @@ void Graph_Traverse_BFS(AdjGraph &G, int start) {
             p = p->nextarc;
         }
     }
+    return OK;
 }
 
 int main() {
     AdjGraph G;
     CreateGraph(G);
-    Graph_Traverse_BFS(G, 0);
+    TraverseGraph_BFS(G, 0);
     return 0;
 }
