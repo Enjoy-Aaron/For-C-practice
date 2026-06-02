@@ -59,6 +59,7 @@ void CreateGraph(AdjGraph &G) {
             G.adj[v2_index].firstarc = q;
         }
     }
+    return OK;
 }
 
 bool visited[MAXN];
