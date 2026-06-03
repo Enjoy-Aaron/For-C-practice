@@ -7,24 +7,21 @@ using namespace std;
 #define OK 1
 #define ERROR 0
 #define OVERFLOW -2
-#define MAX(a,b) (a>b? a:b)
-#define MIN(a,b) (a<b? a:b)
+#define MAX(a, b) (a>b? a:b)
+#define MIN(a, b) (a<b? a:b)
 #define MAXSIZE 1010
 
 typedef char VertexType;
 typedef int Status;
-
 typedef struct ArcNode {
     int adjvex;
     int weight;
     ArcNode *nextarc;
 } ArcNode;
-
 typedef struct VNode {
     VertexType data;
     ArcNode *firstarc;
 } VNode;
-
 typedef struct AdjGraph {
     VNode adj[MAXSIZE];
     int vexnum, arcnum;
