@@ -6,10 +6,10 @@ vector<int> GetDp1(vector<int> &arr)
 {
     int len = arr.size();
     vector<int> dp(len, 1);
-    for (int i=1;i<len;++i) {
+    for (int i=1; i<len; ++i) {
         for (int j=0; j<i; ++j) {
             if (arr[j] < arr[i]) {
-                dp[i] = MAX(dp[i], dp[j]+1);
+                dp[i] = MAX(dp[i], dp[j] + 1);
             }
         }
     }
@@ -20,23 +20,27 @@ vector<int> GetDp2(vector<int> &arr)
 {
     int len = arr.size();
     vector<int> dp(len, 0), ends(len, 0);
-    dp[0] = 1;
-    int l=0, r=0, m=0;
-    int right=0;
-    for (int i=1;i<len;++i) {
-        l = 0; r = right;
-        while (l <= r) {
-            m = (l + r) >> 1;
-            if (arr[i] > arr[m]) {
-                l = m + 1;
+    int right = -1;
+    int left_idx = 0, right_idx = 0, mid_idx = 0;
+    for (int i=0; i<len; ++i) {
+        left_idx = 0; right_idx = right; mid_idx = 0;
+        while (left_idx <= right_idx) {
+            mid_idx = (left_idx + right_idx) >> 1;
+            if (arr[i] > ends[mid_idx]) {
+                left_idx = mid_idx + 1;
             }
             else {
-                r = m - 1;
+                right_idx = mid_idx - 1;
             }
         }
-    right = MAX(right, l);
-    ends[l] = arr[i];
-    dp[i] = l + 1;
+        right = MAX(right, left_idx);
+        ends[left_idx] = arr[i];
+        dp[i] = left_idx + 1;
+        printf("%d %d| ", right, left_idx);
+        for (int j=0; j<=right; ++j) {
+            printf("%d ", ends[j]);
+        }
+        printf("\n");
     }
     return dp;
 }
@@ -45,7 +49,7 @@ vector<int> GenerateLIS(vector<int> &arr, vector<int> &dp)
 {
     int len = 0, index = 0;
     for (int i=0; i<dp.size(); ++i) {
-        if (dp[i] > len) {
+        if (dp[i] >= len) {
             len = dp[i];
             index = i;
         }
@@ -67,7 +71,7 @@ int main()
     scanf("%d",&n);
     vector<int> arr(n,0), dp(n,0);
     for (int i=0;i<n;++i) scanf("%d",&arr[i]);
-    dp = GetDp1(arr);
+    dp = GetDp2(arr);
     for (int i=0;i<n;++i) printf("%d ",dp[i]);
     printf("\n");
     vector<int> LIS = GenerateLIS(arr,dp);
