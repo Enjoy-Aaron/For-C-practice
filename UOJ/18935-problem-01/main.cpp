@@ -1,32 +1,33 @@
-#include <cstdio>
+#include <iostream>
 using namespace std;
-typedef long long ll;
-
-ll check(int x, int n) {
-    ll sum = 0;
-    int cur = x;
-    for (int i = 0; i < n; ++i) {
-        sum += cur;
-        cur = (cur + 1) / 2;
-    }
-    return sum;
-}
 
 int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
     int N, M;
-    scanf("%d%d", &N, &M);
+    cin >> N >> M;
     int left = 1, right = M;
-    int ans = 0;
+    int answer = 0;
     while (left <= right) {
-        int mid = (left + right) / 2;
-        ll total = check(mid, N);
+        int mid = left + (right - left) / 2;
+        long long total = 0;
+        int current = mid;
+
+        for (int i = 0; i < N; ++i) {
+            total += current;
+            if (total > M) break;
+            current = (current + 1) / 2; 
+        }
+
         if (total <= M) {
-            ans = mid;
+            answer = mid;
             left = mid + 1;
         } else {
             right = mid - 1;
         }
     }
-    printf("%d\n", ans);
+
+    cout << answer << endl;
     return 0;
 }
